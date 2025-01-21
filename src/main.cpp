@@ -42,7 +42,7 @@ int main()
       {
         if (parsedInput[1] == builtin[i])
         {
-          std::cout << parsedInput[1] <<" is a shell Builtin" << '\n';
+          std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
           isBuiltIn = true;
         }
       }
