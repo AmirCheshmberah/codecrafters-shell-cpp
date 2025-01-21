@@ -48,7 +48,7 @@ int main()
       }
 
       if(!isBuiltIn)
-        std::cout << "invalid_command: not found" << '\n';
+        std::cout << parsedInput[1] << ": not found" << '\n';
     }
 
     else
