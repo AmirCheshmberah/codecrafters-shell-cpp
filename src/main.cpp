@@ -25,7 +25,20 @@ int main()
       return stoi(parsedInput[1]);
     }
 
-    std::cout << input << ": command not found" << std::endl;
+    else if(parsedInput[0] == "echo")
+    {
+      for(int i = 1; i < parsedInput.size(); i++)
+      {
+        std::cout << parsedInput[i];
+        if(i < parsedInput.size()-1) std::cout << ' ';
+      }
+      std::cout << std::endl;
+    }
+
+    else
+    {
+      std::cout << input << ": command not found" << std::endl;
+    }
   }
 
   return 0;
@@ -36,6 +49,7 @@ std::vector<std::string> input_parser(const std::string& input)
   std::vector<std::string> parsedInput{};
   parsedInput.reserve(8);
   std::string word=""; // empty string
+
   for(int i = 0; i < input.length(); i++)
   {
     if(input[i] != ' ') // find spaces
@@ -46,6 +60,7 @@ std::vector<std::string> input_parser(const std::string& input)
         parsedInput.emplace_back(word);
       }
     }
+
     else
     {
       if (word != "") // make sure dont push any empty string
