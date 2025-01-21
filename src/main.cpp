@@ -2,7 +2,7 @@
 #include <vector>
 
 std::vector<std::string> input_parser(const std::string& input);
-
+std::string builtin[3] = {"exit", "echo", "type"};
 int main()
 {
   // Flush after every std::cout / std:cerr
@@ -12,7 +12,6 @@ int main()
   // Uncomment this block to pass the first stage
   while(true)
   {
-
     std::cout << "$ ";
 
     std::string input;
@@ -33,6 +32,23 @@ int main()
         if(i < parsedInput.size()-1) std::cout << ' ';
       }
       std::cout << std::endl;
+    }
+
+    else if(parsedInput.size() == 2 && parsedInput[0] == "type")
+    {
+      bool isBuiltIn = false;
+      int builtinSize = sizeof(builtin)/sizeof(std::string);
+      for(int i = 0; i < builtinSize; i++)
+      {
+        if (parsedInput[1] == builtin[i])
+        {
+          std::cout << parsedInput[1] <<" is a shell Builtin" << '\n';
+          isBuiltIn = true;
+        }
+      }
+
+      if(!isBuiltIn)
+        std::cout << "invalid_command: not found" << '\n';
     }
 
     else
