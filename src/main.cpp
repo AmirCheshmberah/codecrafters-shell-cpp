@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 
-std::vector<std::string> input_parser(std::string& input);
+std::vector<std::string> input_parser(const std::string& input);
 
 int main()
 {
@@ -31,21 +31,24 @@ int main()
   return 0;
 }
 
-std::vector<std::string> input_parser(std::string& input)
+std::vector<std::string> input_parser(const std::string& input)
 {
-  input += ' ';
   std::vector<std::string> parsedInput{};
   parsedInput.reserve(8);
-  std::string word="";
+  std::string word=""; // empty string
   for(int i = 0; i < input.length(); i++)
   {
-    if(input[i] != ' ')
+    if(input[i] != ' ') // find spaces
     {
       word += input[i];
+      if(i == input.length()-1) // push last word
+      {
+        parsedInput.emplace_back(word);
+      }
     }
     else
     {
-      if (word != "")
+      if (word != "") // make sure dont push any empty string
         parsedInput.emplace_back(word);
       word = "";
     }
