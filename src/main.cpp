@@ -50,11 +50,11 @@ int main()
       }
 
       std::string pathValue = getenv("PATH");
-      std::string command = '/' + parsedInput[1] + ':';
+      std::string command = parsedInput[1];
       std::vector<std::string> directories = mySpliter(pathValue, ':');
       for(int i = 0; i < directories.size(); i++)
       {
-        directories[i] += ':';
+        // std::cout << directories[i] << '\n';
         if(isContain(directories[i], command))
         {
           std::cout << parsedInput[1] << " is " << directories[i] << '\n';
