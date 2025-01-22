@@ -49,18 +49,20 @@ int main()
           break;
         }
       }
-
-      std::string pathValue = getenv("PATH");
-      std::string command = '/' + parsedInput[1];
-      std::vector<std::string> directories = mySpliter(pathValue, ':');
-      for(int i = 0; i < directories.size(); i++)
+      if(!isBuiltIn)
       {
-        // directories[i] += command;
-        if(std::filesystem::exists(directories[i]))
+        std::string pathValue = getenv("PATH");
+        std::string command = '/' + parsedInput[1];
+        std::vector<std::string> directories = mySpliter(pathValue, ':');
+        for(int i = 0; i < directories.size(); i++)
         {
-          std::cout << parsedInput[1] << " is " << directories[i] << '\n';
-          isInPath = true;
-          break;
+          directories[i] += command;
+          if(std::filesystem::exists(directories[i]))
+          {
+            std::cout << parsedInput[1] << " is " << directories[i] << '\n';
+            isInPath = true;
+            break;
+          }
         }
       }
       if(!isBuiltIn && !isInPath)
