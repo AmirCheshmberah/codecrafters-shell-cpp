@@ -55,8 +55,8 @@ int main()
       std::vector<std::string> directories = mySpliter(pathValue, ':');
       for(int i = 0; i < directories.size(); i++)
       {
-        directories[i] += command;
-        if(isContain(directories[i], command))
+        // directories[i] += command;
+        if(std::filesystem::exists(directories[i]))
         {
           std::cout << parsedInput[1] << " is " << directories[i] << '\n';
           isInPath = true;
