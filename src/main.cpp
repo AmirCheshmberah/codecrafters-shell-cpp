@@ -1,23 +1,24 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <string>
 
-std::vector<std::string> input_parser(const std::string& input);
+std::vector<std::string> mySpliter(const std::string& input, const char& delim);
+bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
 int main()
 {
-  // Flush after every std::cout / std:cerr
-  std::cout << std::unitbuf;
-  std::cerr << std::unitbuf;
-
-  // Uncomment this block to pass the first stage
   while(true)
   {
+    // Flush after every std::cout / std:cerr
+    std::cout << std::unitbuf;
+    std::cerr << std::unitbuf;
     std::cout << "$ ";
 
     std::string input;
     std::getline(std::cin, input);
 
-    std::vector<std::string> parsedInput = input_parser(input);
+    std::vector<std::string> parsedInput = mySpliter(input, ' ');
 
     if(parsedInput[0] == "exit")
     {
@@ -36,7 +37,7 @@ int main()
 
     else if(parsedInput.size() == 2 && parsedInput[0] == "type")
     {
-      bool isBuiltIn = false;
+      bool isBuiltIn = false, isInPath = false;
       int builtinSize = sizeof(builtin)/sizeof(std::string);
       for(int i = 0; i < builtinSize; i++)
       {
@@ -44,10 +45,23 @@ int main()
         {
           std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
           isBuiltIn = true;
+          break;
         }
       }
 
-      if(!isBuiltIn)
+      std::string pathValue = getenv("PATH");
+      std::string command = '/' + parsedInput[1] + ':';
+      std::vector<std::string> directories = mySpliter(pathValue, ':');
+      for(int i = 0; i < directories.size(); i++)
+      {
+        if(isContain(directories[i], command))
+        {
+          std::cout << parsedInput[1] << " is " << directories[i];
+          isInPath = true;
+          break;
+        }
+      }
+      if(!isBuiltIn && !isInPath)
         std::cout << parsedInput[1] << ": not found" << '\n';
     }
 
@@ -60,7 +74,25 @@ int main()
   return 0;
 }
 
-std::vector<std::string> input_parser(const std::string& input)
+bool isContain(const std::string& longString, const std::string& shortString)
+{
+  if(shortString.length() > longString.length()) return false;
+  for(int i = 0; i < longString.length(); i++)
+    {
+      int j = 0;
+      for(j = 0; j < shortString.length(); j++)
+      {
+        if(longString[i++] != shortString[j]) break;
+      }
+      if(j == shortString.length())
+      {
+        return true;
+      }
+    }
+    return false;
+}
+
+std::vector<std::string> mySpliter(const std::string& input, const char& delim)
 {
   std::vector<std::string> parsedInput{};
   parsedInput.reserve(8);
@@ -68,10 +100,10 @@ std::vector<std::string> input_parser(const std::string& input)
 
   for(int i = 0; i < input.length(); i++)
   {
-    if(input[i] != ' ') // find spaces
+    if(input[i] != delim) // split
     {
       word += input[i];
-      if(i == input.length()-1) // push last word
+      if(i == input.length()-1) // push last string
       {
         parsedInput.emplace_back(word);
       }
