@@ -55,7 +55,6 @@ int main()
       for(int i = 0; i < directories.size(); i++)
       {
         directories[i] += ':';
-        std::cout << directories[i] << '\n';
         if(isContain(directories[i], command))
         {
           std::cout << parsedInput[1] << " is " << directories[i] << '\n';
