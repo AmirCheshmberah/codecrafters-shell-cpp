@@ -56,7 +56,7 @@ int main()
       for(int i = 0; i < directories.size(); i++)
       {
         directories[i] += command;
-        if(std::filesystem::exists(directories[i]))
+        if(isContain(directories[i], command))
         {
           std::cout << parsedInput[1] << " is " << directories[i] << '\n';
           isInPath = true;
