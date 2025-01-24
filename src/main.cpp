@@ -6,15 +6,15 @@
 
 enum ValidCommands
 {
-  exit,
+  _exit,
   echo,
   type,
   exe_file
 };
 
-ValidCommands validBuiltin(std::string command)
+ValidCommands isValid(std::string command)
 {
-  if(command == "exit") return ValidCommands::exit;
+  if(command == "exit") return ValidCommands::_exit;
   else if(command == "echo") return ValidCommands::echo;
   else if(command == "type") return ValidCommands::type;
   else return ValidCommands::exe_file;
@@ -39,9 +39,9 @@ int main()
     std::vector<std::string> parsedInput = mySpliter(input, ' ');
     std::vector<std::string> parsedPathValue = mySpliter(getenv("PATH"), ':');
 
-    switch (validBuiltin(parsedInput[0]))
+    switch (isValid(parsedInput[0]))
     {
-      case exit:
+      case _exit:
       {
         return stoi(parsedInput[1]);
         break;
@@ -86,6 +86,7 @@ int main()
         }
         if(!isBuiltIn && !isInPath)
           std::cout << parsedInput[1] << ": not found" << '\n';
+        break;
         }
 
       case exe_file:
@@ -102,6 +103,7 @@ int main()
         }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
+        break;
       }
       default:
       {
