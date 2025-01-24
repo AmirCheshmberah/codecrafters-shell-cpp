@@ -77,8 +77,8 @@ int main()
 
         if(std::filesystem::exists(filePath))
         {
-          filePath = directories[i] + ' ' + input;
-          // std::cout << filePath << '\n';
+          filePath = directories[i] + '/' + input;
+          std::cout << filePath << '\n';
           std::system(filePath.c_str());
           isExec = true;
         }
