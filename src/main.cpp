@@ -48,7 +48,16 @@ int main()
       }
 
       case echo:
-      {
+      { 
+        char* cur = &input[5];
+        while(*cur != '\'') cur++;
+        if(*cur == '\'')
+        {
+          while(*(++cur) != '\'')
+            std::cout << *cur;
+          std::cout << '\n';
+          continue;
+        }
         for(int i = 1; i < parsedInput.size(); i++)
         {
           std::cout << parsedInput[i];
