@@ -115,11 +115,6 @@ int main()
   return 0;
 }
 
-// std::string findPath(const std::string& command)
-// {
-//   return std::string filePath = 
-// }
-
 bool isContain(const std::string& longString, const std::string& shortString)
 {
   if(shortString.length() > longString.length()) return false;
