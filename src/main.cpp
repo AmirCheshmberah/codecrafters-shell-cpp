@@ -6,7 +6,7 @@
 
 enum ValidCommands
 {
-  _exit,
+  exitt,
   echo,
   type,
   exe_file
@@ -14,7 +14,7 @@ enum ValidCommands
 
 ValidCommands isValid(std::string command)
 {
-  if(command == "exit") return ValidCommands::_exit;
+  if(command == "exit") return ValidCommands::exitt;
   else if(command == "echo") return ValidCommands::echo;
   else if(command == "type") return ValidCommands::type;
   else return ValidCommands::exe_file;
@@ -41,16 +41,19 @@ int main()
 
     switch (isValid(parsedInput[0]))
     {
-      case _exit:
+      case exitt:
       {
         return stoi(parsedInput[1]);
         break;
       }
 
       case echo:
-      { 
+      {
+        auto itr = input.begin();
+        auto end_of_input = input.end();
         char* cur = &input[5];
-        while(*cur != '\'') cur++;
+        while(itr++ != end_of_input && *cur != '\'')
+          cur++;
         if(*cur == '\'')
         {
           while(*(++cur) != '\'')
