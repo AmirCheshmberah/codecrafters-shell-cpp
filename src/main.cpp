@@ -77,8 +77,8 @@ int main()
 
         if(std::filesystem::exists(filePath))
         {
-          std::string command = directories[i] + ' ' + input;
-          std::system(command.c_str());
+          filePath += " " + parsedInput[1];
+          std::system(filePath.c_str());
           isExec = true;
         }
       }
