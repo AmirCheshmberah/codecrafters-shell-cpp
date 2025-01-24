@@ -7,6 +7,7 @@
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
+std::vector<std::string> directories;
 int main()
 {
   while(true)
@@ -49,17 +50,17 @@ int main()
           break;
         }
       }
-      if(!isBuiltIn)
+      if(!isBuiltIn) // PATH
       {
         std::string pathValue = getenv("PATH");
         std::string command = '/' + parsedInput[1];
-        std::vector<std::string> directories = mySpliter(pathValue, ':');
+        directories = mySpliter(pathValue, ':');
         for(int i = 0; i < directories.size(); i++)
         {
-          directories[i] += command;
-          if(std::filesystem::exists(directories[i]))
+          std::string filePath = directories[i] + command;
+          if(std::filesystem::exists(filePath))
           {
-            std::cout << parsedInput[1] << " is " << directories[i] << '\n';
+            std::cout << parsedInput[1] << " is " << filePath << '\n';
             isInPath = true;
             break;
           }
@@ -68,10 +69,20 @@ int main()
       if(!isBuiltIn && !isInPath)
         std::cout << parsedInput[1] << ": not found" << '\n';
     }
-
     else
     {
-      std::cout << input << ": command not found" << std::endl;
+      bool isExec = false;
+      for(int i = 0; i < directories.size(); i++)
+      {
+        std::string filePath = directories[i] + '/' + parsedInput[0];
+        if(std::filesystem::exists(filePath))
+        {
+          system(filePath.c_str());
+          isExec = true;
+        }
+      }
+      if(!isExec)
+        std::cout << input << ": command not found" << std::endl;
     }
   }
 
