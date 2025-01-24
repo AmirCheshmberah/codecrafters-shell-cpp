@@ -4,9 +4,26 @@
 #include <string>
 #include <filesystem>
 
+enum ValidCommands
+{
+  exit,
+  echo,
+  type,
+  exe_file
+};
+
+ValidCommands validBuiltin(std::string command)
+{
+  if(command == "exit") return ValidCommands::exit;
+  else if(command == "echo") return ValidCommands::echo;
+  else if(command == "type") return ValidCommands::type;
+  else return ValidCommands::exe_file;
+}
+
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
+
 int main()
 {
   while(true)
@@ -20,76 +37,86 @@ int main()
     std::getline(std::cin, input);
 
     std::vector<std::string> parsedInput = mySpliter(input, ' ');
-    std::string pathValue = getenv("PATH");
-    std::vector<std::string> directories = mySpliter(pathValue, ':');
+    std::vector<std::string> parsedPathValue = mySpliter(getenv("PATH"), ':');
 
-    if(parsedInput[0] == "exit")
+    switch (validBuiltin(parsedInput[0]))
     {
-      return stoi(parsedInput[1]);
-    }
-
-    else if(parsedInput[0] == "echo")
-    {
-      for(int i = 1; i < parsedInput.size(); i++)
+      case exit:
       {
-        std::cout << parsedInput[i];
-        if(i < parsedInput.size()-1) std::cout << ' ';
+        return stoi(parsedInput[1]);
+        break;
       }
-      std::cout << std::endl;
-    }
 
-    else if(parsedInput.size() == 2 && parsedInput[0] == "type")
-    {
-      bool isBuiltIn = false, isInPath = false;
-      int builtinSize = sizeof(builtin)/sizeof(std::string);
-      for(int i = 0; i < builtinSize; i++)
+      case echo:
       {
-        if (parsedInput[1] == builtin[i])
+        for(int i = 1; i < parsedInput.size(); i++)
         {
-          std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
-          isBuiltIn = true;
-          break;
+          std::cout << parsedInput[i];
+          if(i < parsedInput.size()-1) std::cout << ' ';
         }
+        std::cout << std::endl;
+        break;
       }
-      if(!isBuiltIn) // PATH
+
+      case type:
       {
-        std::string command = '/' + parsedInput[1];
-        for(int i = 0; i < directories.size(); i++)
+        bool isBuiltIn = false, isInPath = false;
+        int builtinSize = sizeof(builtin)/sizeof(std::string);
+        for(int i = 0; i < builtinSize; i++)
         {
-          std::string filePath = directories[i] + command;
-          if(std::filesystem::exists(filePath))
+          if (parsedInput[1] == builtin[i])
           {
-            std::cout << parsedInput[1] << " is " << filePath << '\n';
-            isInPath = true;
+            std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
+            isBuiltIn = true;
             break;
           }
         }
-      }
-      if(!isBuiltIn && !isInPath)
-        std::cout << parsedInput[1] << ": not found" << '\n';
-    }
-    else
-    {
-      bool isExec = false;
-      for(int i = 0; i < directories.size(); i++)
-      {
-        std::string filePath = directories[i] + '/' + parsedInput[0];
-
-        if(std::filesystem::exists(filePath))
+        if(!isBuiltIn) // PATH
         {
-          // std::string command = " " + parsedInput[1];
-          std::system(input.c_str());
-          isExec = true;
+          for(int i = 0; i < parsedPathValue.size(); i++)
+          {
+            std::string filePath = parsedPathValue[i] + '/' + parsedInput[1];
+            if(std::filesystem::exists(filePath))
+            {
+              std::cout << parsedInput[1] << " is " << filePath << '\n';
+              isInPath = true;
+              break;
+            }
+          }
         }
-        else continue;
+        if(!isBuiltIn && !isInPath)
+          std::cout << parsedInput[1] << ": not found" << '\n';
+        }
+
+      case exe_file:
+      {
+        bool isExe = false;
+        for(int i = 0; i < parsedPathValue.size(); i++)
+        {
+          std::string filePath = parsedPathValue[i] + '/' + parsedInput[0];
+          if(std::filesystem::exists(filePath))
+          {
+            std::system(input.c_str());
+            isExe = true;
+          }
+        }
+        if(!isExe)
+          std::cout << input << ": command not found" << std::endl;
       }
-      if(!isExec)
+      default:
+      {
         std::cout << input << ": command not found" << std::endl;
+      }
     }
   }
 
   return 0;
 }
+
+// std::string findPath(const std::string& command)
+// {
+//   return std::string filePath = 
+// }
 
 bool isContain(const std::string& longString, const std::string& shortString)
 {
