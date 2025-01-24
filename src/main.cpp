@@ -74,8 +74,10 @@ int main()
       for(int i = 0; i < directories.size(); i++)
       {
         std::string filePath = directories[i] + '/' + parsedInput[0];
+
         if(std::filesystem::exists(filePath))
         {
+          filePath = "exec " + directories[i] + '/' + input;
           std::system(filePath.c_str());
           isExec = true;
         }
