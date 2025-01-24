@@ -73,11 +73,11 @@ int main()
       bool isExec = false;
       for(int i = 0; i < directories.size(); i++)
       {
-        std::string filePath = directories[i] + '/';
+        std::string filePath = directories[i] + '/' + parsedInput[0];
 
         if(std::filesystem::exists(filePath))
         {
-          filePath += input;
+          // filePath += " " + parsedInput[1];
           std::system(filePath.c_str());
           isExec = true;
         }
