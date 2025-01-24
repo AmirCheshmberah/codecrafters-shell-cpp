@@ -78,7 +78,7 @@ int main()
         if(std::filesystem::exists(filePath))
         {
           filePath += " " + parsedInput[1];
-          std::cout << filePath[i] << '\n';
+          std::cout << filePath << '\n';
           std::system(filePath.c_str());
           isExec = true;
         }
