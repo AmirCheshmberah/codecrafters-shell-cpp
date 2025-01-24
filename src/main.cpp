@@ -7,7 +7,6 @@
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
-std::vector<std::string> directories{};
 int main()
 {
   while(true)
@@ -21,6 +20,8 @@ int main()
     std::getline(std::cin, input);
 
     std::vector<std::string> parsedInput = mySpliter(input, ' ');
+    std::string pathValue = getenv("PATH");
+    std::vector<std::string> directories = mySpliter(pathValue, ':');
 
     if(parsedInput[0] == "exit")
     {
@@ -52,9 +53,7 @@ int main()
       }
       if(!isBuiltIn) // PATH
       {
-        std::string pathValue = getenv("PATH");
         std::string command = '/' + parsedInput[1];
-        directories = mySpliter(pathValue, ':');
         for(int i = 0; i < directories.size(); i++)
         {
           std::string filePath = directories[i] + command;
@@ -74,7 +73,7 @@ int main()
       bool isExec = false;
       for(int i = 0; i < directories.size(); i++)
       {
-        std::string filePath = directories[i] + '/' + parsedInput[0] + ' ';
+        std::string filePath = directories[i] + '/' + parsedInput[0];
         if(std::filesystem::exists(filePath))
         {
           std::system(filePath.c_str());
