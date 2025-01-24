@@ -77,10 +77,12 @@ int main()
 
         if(std::filesystem::exists(filePath))
         {
-          filePath = directories[i] + '/' + input;
+          filePath = "exec " + directories[i] + '/' + input;
+          // std::cout << filePath << '\n';
           std::system(filePath.c_str());
           isExec = true;
         }
+        else continue;
       }
       if(!isExec)
         std::cout << input << ": command not found" << std::endl;
