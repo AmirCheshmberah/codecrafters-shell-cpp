@@ -102,6 +102,7 @@ int main()
             std::system(input.c_str());
             isExe = true;
           }
+          else continue;
         }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
