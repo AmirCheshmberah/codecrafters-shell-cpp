@@ -131,8 +131,8 @@ std::string doEcho(const std::string& input)
       {
         result += input[i];
       }
-      continue;
       i++;
+      continue;
     }
 
     if(input[i] == '\'')
@@ -141,8 +141,8 @@ std::string doEcho(const std::string& input)
       {
         result += input[i];
       }
-      continue;
       i++;
+      continue;
     }
 
     if(input[i] != ' ')
