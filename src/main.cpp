@@ -131,6 +131,7 @@ std::string doEcho(const std::string& input)
       {
         result += input[i];
       }
+      continue;
       i++;
     }
 
@@ -140,6 +141,7 @@ std::string doEcho(const std::string& input)
       {
         result += input[i];
       }
+      continue;
       i++;
     }
 
