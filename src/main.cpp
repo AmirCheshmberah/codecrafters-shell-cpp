@@ -129,10 +129,7 @@ std::vector<std::string> echoParser(const std::string& input)
       {
         word += input[i];
       }
-    if(word != "")
-      parsedEcho.emplace_back(word);
-    word = "";
-    continue;
+      continue;
     }
 
     if(input[i] == ' ')
