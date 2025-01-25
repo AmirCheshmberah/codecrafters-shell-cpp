@@ -86,7 +86,6 @@ int main()
               isInPath = true;
               break;
             }
-            else break;
           }
         }
         if(!isBuiltIn && !isInPath)
