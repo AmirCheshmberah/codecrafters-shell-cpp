@@ -117,6 +117,7 @@ int main()
       default:
       {
         std::cout << input << ": command not found" << std::endl;
+        break;
       }
     }
   }
@@ -130,6 +131,15 @@ std::vector<std::string> echoParser(const std::string& input)
   std::string word = "";
   for(int i = 5; i < input.length(); i++)
   {
+    if(input[i] == '"')
+    {
+      while(input[++i] != '"')
+      {
+        word += input[i];
+      }
+      continue;
+    }
+
     if(input[i] == '\'')
     {
       while(input[++i] != '\'')
