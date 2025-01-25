@@ -51,18 +51,6 @@ int main()
       case echo:
       {
         std::vector<std::string> parsedEcho = echoParser(input);
-        // auto itr = input.begin();
-        // auto end_of_input = input.end();
-        // char* cur = &input[5];
-        // while(itr++ != end_of_input && *cur != '\'')
-        //   cur++;
-        // if(*cur == '\'')
-        // {
-        //   while(*(++cur) != '\'')
-        //     std::cout << *cur;
-        //   std::cout << '\n';
-        //   continue;
-        // }
         for(int i = 0; i < parsedEcho.size(); i++)
         {
           std::cout << parsedEcho[i];
@@ -141,7 +129,10 @@ std::vector<std::string> echoParser(const std::string& input)
       {
         word += input[i];
       }
-      i++; // for close single qoute
+    if(word != "")
+      parsedEcho.emplace_back(word);
+    word = "";
+    continue;
     }
 
     if(input[i] == ' ')
@@ -155,6 +146,7 @@ std::vector<std::string> echoParser(const std::string& input)
       word += input[i];
     }
   }
+
   if(word != "")
     parsedEcho.emplace_back(word);
   return parsedEcho;
