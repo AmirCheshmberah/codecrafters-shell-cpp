@@ -21,6 +21,7 @@ ValidCommands isValid(std::string command)
 }
 
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
+std::vector<std::string> echoParser (const std::string& input);
 bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
 
@@ -49,22 +50,23 @@ int main()
 
       case echo:
       {
-        auto itr = input.begin();
-        auto end_of_input = input.end();
-        char* cur = &input[5];
-        while(itr++ != end_of_input && *cur != '\'')
-          cur++;
-        if(*cur == '\'')
+        std::vector<std::string> parsedEcho = echoParser(input);
+        // auto itr = input.begin();
+        // auto end_of_input = input.end();
+        // char* cur = &input[5];
+        // while(itr++ != end_of_input && *cur != '\'')
+        //   cur++;
+        // if(*cur == '\'')
+        // {
+        //   while(*(++cur) != '\'')
+        //     std::cout << *cur;
+        //   std::cout << '\n';
+        //   continue;
+        // }
+        for(int i = 0; i < parsedEcho.size(); i++)
         {
-          while(*(++cur) != '\'')
-            std::cout << *cur;
-          std::cout << '\n';
-          continue;
-        }
-        for(int i = 1; i < parsedInput.size(); i++)
-        {
-          std::cout << parsedInput[i];
-          if(i < parsedInput.size()-1) std::cout << ' ';
+          std::cout << parsedEcho[i];
+          if(i < parsedEcho.size()-1) std::cout << ' ';
         }
         std::cout << std::endl;
         break;
@@ -125,6 +127,37 @@ int main()
   }
 
   return 0;
+}
+
+std::vector<std::string> echoParser(const std::string& input)
+{
+  std::vector<std::string> parsedEcho{};
+  std::string word = "";
+  for(int i = 5; i < input.length(); i++)
+  {
+    if(input[i] == '\'')
+    {
+      while(input[++i] != '\'')
+      {
+        word += input[i];
+      }
+      i++; // for close single qoute
+    }
+
+    if(input[i] == ' ')
+    {
+      if(word != "")
+        parsedEcho.emplace_back(word);
+      word = "";
+    }
+    else
+    {
+      word += input[i];
+    }
+  }
+  if(word != "")
+    parsedEcho.emplace_back(word);
+  return parsedEcho;
 }
 
 bool isContain(const std::string& longString, const std::string& shortString)
