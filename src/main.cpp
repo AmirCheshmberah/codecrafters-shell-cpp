@@ -25,6 +25,7 @@ ValidCommands isValid(std::string command)
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 std::vector<std::string> echoParser (const std::string& input);
 bool isContain(const std::string& longString, const std::string& shortString);
+std::string doEcho(const std::string& input);
 std::string builtin[3] = {"exit", "echo", "type"};
 
 int main()
@@ -52,13 +53,7 @@ int main()
 
       case echo:
       {
-        std::vector<std::string> parsedEcho = echoParser(input);
-        for(int i = 0; i < parsedEcho.size(); i++)
-        {
-          std::cout << parsedEcho[i];
-          if(i < parsedEcho.size()-1) std::cout << ' ';
-        }
-        std::cout << std::endl;
+        std::cout << doEcho(input) << std::endl;
         break;
       }
 
@@ -123,6 +118,46 @@ int main()
   }
 
   return 0;
+}
+
+std::string doEcho(const std::string& input)
+{
+  std::string result = "";
+  for(int i = 5; i < input.length();)
+  {
+    if(input[i] == '"')
+    {
+      while(input[++i] != '"')
+      {
+        result += input[i];
+      }
+      i++;
+    }
+
+    if(input[i] == '\'')
+    {
+      while(input[++i] != '\'')
+      {
+        result += input[i];
+      }
+      i++;
+    }
+
+    if(input[i] != ' ')
+    {
+      result += input[i++];
+    }
+    else
+    {
+      while(input[i] == ' ')
+      {
+        i++;
+      }
+      if(result != "")
+        result += ' ';
+    }
+  }
+  return result;
 }
 
 std::vector<std::string> echoParser(const std::string& input)
