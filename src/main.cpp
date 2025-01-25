@@ -86,6 +86,7 @@ int main()
               isInPath = true;
               break;
             }
+            else break;
           }
         }
         if(!isBuiltIn && !isInPath)
@@ -95,6 +96,7 @@ int main()
       case cat:
       {
         std::system(input.c_str());
+        break;
       }
       case exe_file:
       {
@@ -107,7 +109,7 @@ int main()
             std::system(input.c_str());
             isExe = true;
           }
-          else continue;
+          else break;
         }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
