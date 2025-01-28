@@ -104,9 +104,13 @@ int main()
             isExe = true;
           }
         }
-        if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
+        for(int i = 0; i < parsedPathValue.size(); i++)
         {
-          std::system(parsedInput[parsedInput.size()-1].c_str());
+          std::string quoted_executable = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
+          if(std::filesystem::exists(quoted_executable))
+          {
+            std::system(input.c_str());
+          }
         }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
