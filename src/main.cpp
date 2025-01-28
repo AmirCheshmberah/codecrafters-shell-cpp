@@ -107,9 +107,10 @@ int main()
         for(int i = 0; i < parsedPathValue.size(); i++)
         {
           std::string quoted_executable = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
+          std::cout << quoted_executable;
           if(std::filesystem::exists(quoted_executable))
           {
-            std::cout << quoted_executable;
+            std::cout << "TESTtttttt";
             std::system(quoted_executable.c_str());
             isExe = true;
           }
