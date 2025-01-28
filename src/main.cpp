@@ -100,7 +100,7 @@ int main()
           std::string filePath = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
           if(std::filesystem::exists(filePath))
           {
-            std::system(input.c_str());
+            std::system(filePath.c_str());
             isExe = true;
           }
         }
