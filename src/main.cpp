@@ -106,9 +106,10 @@ int main()
         }
         if(parsedInput.size() > 1)
         {
-          if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
+          std::string str = ' ' + parsedInput[parsedInput.size()-1];
+          if(std::filesystem::exists(str))
           {
-            std::system(parsedInput[parsedInput.size()-1].c_str());
+            std::system(str.c_str());
             isExe = true;
           }
         }
