@@ -103,7 +103,6 @@ int main()
             std::system(input.c_str());
             isExe = true;
           }
-          else break;
         }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
@@ -141,6 +140,13 @@ std::string doEcho(const std::string& input)
       {
         result += input[i];
       }
+      i++;
+      continue;
+    }
+
+    if(input[i] == '\\')
+    {
+      result += input[++i];
       i++;
       continue;
     }
