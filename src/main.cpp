@@ -110,6 +110,7 @@ int main()
           if(std::filesystem::exists(quoted_executable))
           {
             std::system(quoted_executable.c_str());
+            isExe = true;
           }
         }
         if(!isExe)
