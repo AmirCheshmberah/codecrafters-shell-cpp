@@ -95,16 +95,15 @@ int main()
       case exe_file:
       {
         bool isExe = false;
-        if(parsedInput.size() > 1)
+        if(parsedInput.size() > 1) // quoted executable
         {
-          std::string str = parsedInput[parsedInput.size()-1];
-          if(std::filesystem::exists(str))
+          if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
           {
             std::system(input.c_str());
             isExe = true;
           }
         }
-        for(int i = 0; i < parsedPathValue.size(); i++)
+        for(int i = 0; i < parsedPathValue.size(); i++) // PATH
         {
           std::string filePath = parsedPathValue[i] + '/' + parsedInput[0];
           if(std::filesystem::exists(filePath))
