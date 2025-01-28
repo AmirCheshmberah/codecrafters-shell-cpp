@@ -106,14 +106,10 @@ int main()
         }
         if(parsedInput.size() > 1)
         {
-          for(int i = 0; i < parsedPathValue.size(); i++)
+          if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
           {
-            std::string quoted_executable = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
-            if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
-            {
-              std::system(quoted_executable.c_str());
-              isExe = true;
-            }
+            std::system(parsedInput[parsedInput.size()-1].c_str());
+            isExe = true;
           }
         }
         if(!isExe)
