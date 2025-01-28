@@ -97,10 +97,19 @@ int main()
         bool isExe = false;
         for(int i = 0; i < parsedPathValue.size(); i++)
         {
-          std::string filePath = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
+          std::string filePath = parsedPathValue[i] + '/' + parsedInput[0];
           if(std::filesystem::exists(filePath))
           {
-            std::system(filePath.c_str());
+            std::system(input.c_str());
+            isExe = true;
+          }
+        }
+        for(int i = 0; i < parsedPathValue.size(); i++)
+        {
+          std::string quoted_executable = parsedPathValue[i] + parsedInput[parsedInput.size()-1];
+          if(std::filesystem::exists(quoted_executable))
+          {
+            std::system(quoted_executable.c_str());
             isExe = true;
           }
         }
