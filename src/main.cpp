@@ -108,8 +108,8 @@ int main()
         {
           for(int i = 0; i < parsedPathValue.size(); i++)
           {
-            std::string quoted_executable = parsedPathValue[i] + ' ' + parsedInput[parsedInput.size()-1];
-            if(std::filesystem::exists(quoted_executable))
+            std::string quoted_executable = parsedPathValue[i] + parsedInput[parsedInput.size()-1];
+            if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
             {
               std::system(quoted_executable.c_str());
               isExe = true;
