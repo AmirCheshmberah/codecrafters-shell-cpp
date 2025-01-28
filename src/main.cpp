@@ -109,7 +109,7 @@ int main()
           std::string quoted_executable = parsedPathValue[i] + '/' + parsedInput[parsedInput.size()-1];
           if(std::filesystem::exists(quoted_executable))
           {
-            std::system(input.c_str());
+            std::system(quoted_executable.c_str());
           }
         }
         if(!isExe)
