@@ -100,7 +100,7 @@ int main()
           std::string str = parsedInput[parsedInput.size()-1];
           if(std::filesystem::exists(str))
           {
-            std::system(str.c_str());
+            std::system(input.c_str());
             isExe = true;
           }
         }
