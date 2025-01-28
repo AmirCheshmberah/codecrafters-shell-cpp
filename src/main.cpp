@@ -128,6 +128,11 @@ std::string doEcho(const std::string& input)
     {
       while(input[++i] != '"')
       {
+        if(input[i] == '\\')
+        {
+          result += input[++i];
+          i++;
+        }
         result += input[i];
       }
       i++;
@@ -178,6 +183,11 @@ std::vector<std::string> echoParser(const std::string& input)
     {
       while(input[++i] != '"')
       {
+        if(input[i] == '\\')
+        {
+          word += input[++i];
+          i++;
+        }
         word += input[i];
       }
       continue;
@@ -189,6 +199,13 @@ std::vector<std::string> echoParser(const std::string& input)
       {
         word += input[i];
       }
+      continue;
+    }
+
+    if(input[i] == '\\')
+    {
+      word += input[++i];
+      i++;
       continue;
     }
 
