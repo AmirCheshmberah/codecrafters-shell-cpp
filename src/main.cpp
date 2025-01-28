@@ -95,21 +95,21 @@ int main()
       case exe_file:
       {
         bool isExe = false;
+        if(parsedInput.size() > 1)
+        {
+          std::string str = parsedInput[parsedInput.size()-1];
+          if(std::filesystem::exists(str))
+          {
+            std::system(str.c_str());
+            isExe = true;
+          }
+        }
         for(int i = 0; i < parsedPathValue.size(); i++)
         {
           std::string filePath = parsedPathValue[i] + '/' + parsedInput[0];
           if(std::filesystem::exists(filePath))
           {
             std::system(input.c_str());
-            isExe = true;
-          }
-        }
-        if(parsedInput.size() > 1)
-        {
-          std::string str = ' ' + parsedInput[parsedInput.size()-1];
-          if(std::filesystem::exists(str))
-          {
-            std::system(str.c_str());
             isExe = true;
           }
         }
