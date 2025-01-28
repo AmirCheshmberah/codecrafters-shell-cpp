@@ -131,7 +131,7 @@ std::string doEcho(const std::string& input)
         if(input[i] == '\\')
         {
           result += input[++i];
-          i++;
+          continue;
         }
         result += input[i];
       }
