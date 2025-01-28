@@ -104,6 +104,10 @@ int main()
             isExe = true;
           }
         }
+        if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
+        {
+          std::system(parsedInput[parsedInput.size()-1].c_str());
+        }
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
         break;
