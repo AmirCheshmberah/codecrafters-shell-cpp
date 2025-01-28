@@ -109,7 +109,7 @@ int main()
           std::string quoted_executable = parsedInput[parsedInput.size()-1];
           if(std::filesystem::exists(quoted_executable))
           {
-            cout << "TESTTTTT";
+            std::cout << "TESTTTTT";
             std::system(quoted_executable.c_str());
             isExe = true;
           }
