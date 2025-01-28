@@ -24,8 +24,8 @@ ValidCommands isValid(std::string command)
 
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 std::vector<std::string> echoParser (const std::string& input);
-bool isContain(const std::string& longString, const std::string& shortString);
 std::string doEcho(const std::string& input);
+bool isContain(const std::string& longString, const std::string& shortString);
 std::string builtin[3] = {"exit", "echo", "type"};
 
 int main()
@@ -186,7 +186,7 @@ std::vector<std::string> echoParser(const std::string& input)
         if(input[i] == '\\')
         {
           word += input[++i];
-          i++;
+          continue;
         }
         word += input[i];
       }
