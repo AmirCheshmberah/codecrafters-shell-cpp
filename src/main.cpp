@@ -306,7 +306,8 @@ std::string doEcho(const std::string& input)
 
   int i = 0;
   result = parsedEcho[i++];
-  while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>" && parsedEcho[i] != "2>")
+  while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>"
+         && parsedEcho[i] != "2>" && parsedEcho[i] != ">>" && parsedEcho[i] != "1>>")
   {
     result += ' ' + parsedEcho[i++];
   }
