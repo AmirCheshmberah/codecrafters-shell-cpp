@@ -115,7 +115,13 @@ int main()
       {
         bool isExe = false;
 
-        if(parsedInput.size() > 1) // quoted executable
+        if(getPath(parsedInput[0]) != "")
+        {
+          std::system(input.c_str());
+          isExe = true;
+        }
+
+        else if(parsedInput.size() > 1) // quoted executable
         {
           if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
           {
@@ -123,12 +129,7 @@ int main()
             isExe = true;
           }
         }
-        else if(getPath(parsedInput[0]) != "")
-        {
-          std::system(input.c_str());
-          isExe = true;
-        }
-        
+
         if(!isExe)
           std::cout << input << ": command not found" << std::endl;
         break;
