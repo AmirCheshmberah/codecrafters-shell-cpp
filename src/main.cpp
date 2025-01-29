@@ -158,6 +158,7 @@ void handle_cat()
         {
           std::cout << content << '\n';
         }
+        file.close();
       }
       else
       {
@@ -202,6 +203,7 @@ void handle_ls()
       std::fstream file {parsedInput[4], std::ios::out};
       for (const auto& fileName : fileNamesInDirectory(parsedInput[2]))
         file << fileName << '\n';
+      file.close();
     }
   }
 }
