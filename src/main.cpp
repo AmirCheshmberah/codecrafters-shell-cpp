@@ -149,14 +149,7 @@ void handle_cat()
   {
     for(int i = 1; i < parsedInput.size(); i++)
     {
-      if(!std::filesystem::exists(parsedInput[i]))
-      {
-        std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
-        return;
-      }
-    }
-    for(int i = 1; i < parsedInput.size(); i++)
-    {
+      
       if(std::filesystem::exists(parsedInput[i]))
       {
         std::string content{};
@@ -166,6 +159,11 @@ void handle_cat()
           std::cout << content << '\n';
         }
         file.close();
+      }
+      else
+      {
+        std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
+        return;
       }
     }
   }
