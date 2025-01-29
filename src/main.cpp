@@ -199,7 +199,7 @@ void handle_cat()
   }
 }
 
-void handle_ls()
+void handle_ls() // its a stinky implementation
 {
   if(parsedInput[0] == "ls")
   {
@@ -306,10 +306,11 @@ std::string doEcho(const std::string& input)
 
   int i = 0;
   result = parsedEcho[i++];
-  while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>")
+  while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>" && parsedEcho[i] != "2>")
   {
     result += ' ' + parsedEcho[i++];
   }
+
   if(parsedEcho[i] == ">" || parsedEcho[i] == "1>")
   {
     std::fstream file {parsedEcho[++i], std::ios::out};
@@ -317,6 +318,10 @@ std::string doEcho(const std::string& input)
     return "";
   }
 
+  if(parsedEcho[i] == "2>")
+  {
+    std::fstream file {parsedEcho[++i], std::ios::out};
+  }
   return result;
 }
 
