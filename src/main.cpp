@@ -26,7 +26,6 @@ ValidCommands isValid(std::string command)
 }
 
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
-std::vector<std::string> echoParser (const std::string& input);
 std::vector<std::string> fileNamesInDirectory(const std::string& directory);
 std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& directory);
 std::string doEcho(const std::string& input);
@@ -150,6 +149,14 @@ void handle_cat()
   {
     for(int i = 1; i < parsedInput.size(); i++)
     {
+      if(!std::filesystem::exists(parsedInput[i]))
+      {
+        std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
+        return;
+      }
+    }
+    for(int i = 1; i < parsedInput.size(); i++)
+    {
       if(std::filesystem::exists(parsedInput[i]))
       {
         std::string content{};
@@ -159,10 +166,6 @@ void handle_cat()
           std::cout << content << '\n';
         }
         file.close();
-      }
-      else
-      {
-        std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
       }
     }
   }
@@ -300,59 +303,6 @@ std::string doEcho(const std::string& input)
   if(token != "")
     parsedEcho.emplace_back(token);
   return result;
-}
-
-std::vector<std::string> echoParser(const std::string& input)
-{
-  std::vector<std::string> parsedEcho{};
-  std::string word = "";
-  for(int i = 5; i < input.length(); i++)
-  {
-    if(input[i] == '"')
-    {
-      while(input[++i] != '"')
-      {
-        if(input[i] == '\\')
-        {
-          word += input[++i];
-          continue;
-        }
-        word += input[i];
-      }
-      continue;
-    }
-
-    if(input[i] == '\'')
-    {
-      while(input[++i] != '\'')
-      {
-        word += input[i];
-      }
-      continue;
-    }
-
-    if(input[i] == '\\')
-    {
-      word += input[++i];
-      i++;
-      continue;
-    }
-
-    if(input[i] == ' ')
-    {
-      if(word != "")
-        parsedEcho.emplace_back(word);
-      word = "";
-    }
-    else
-    {
-      word += input[i];
-    }
-  }
-
-  if(word != "")
-    parsedEcho.emplace_back(word);
-  return parsedEcho;
 }
 
 bool isContain(const std::string& longString, const std::string& shortString)
