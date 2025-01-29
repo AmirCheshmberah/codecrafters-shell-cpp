@@ -204,10 +204,10 @@ void handle_ls()
     else if(parsedInput.size() == 5 && parsedInput[1] == "-1" && std::filesystem::exists(parsedInput[2])
             && parsedInput[3] == ">") // e.g "ls -1 {directory} > {file}"
     {
-      int i{};
-      while(parsedInput[2][i] == '/')
-        i++;
-      parsedInput[2] = parsedInput[2].substr(i, parsedInput[2].length());
+      // int i{};
+      // while(parsedInput[2][i] == '/')
+      //   i++;
+      // parsedInput[2] = parsedInput[2].substr(i, parsedInput[2].length());
 
       std::fstream file {parsedInput[4], std::ios::out};
       for (auto& fileName : fileNamesInDirectory(parsedInput[2]))
