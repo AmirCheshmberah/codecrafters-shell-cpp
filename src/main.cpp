@@ -191,11 +191,6 @@ void handle_ls()
 
     else if(parsedInput.size() == 4 && std::filesystem::exists(parsedInput[1]) && parsedInput[2] == ">") // e.g "ls {directory} > {file}"
     {
-      int i{};
-      while(parsedInput[1][i] == '/')
-        i++;
-      parsedInput[1] = parsedInput[1].substr(i, parsedInput[1].length());
-
       std::fstream file {parsedInput[3], std::ios::out};
       for (auto& fileName : fileNamesInDirectory(parsedInput[1]))
         file << fileName << '\n';
@@ -204,15 +199,9 @@ void handle_ls()
     else if(parsedInput.size() == 5 && parsedInput[1] == "-1" && std::filesystem::exists(parsedInput[2])
             && parsedInput[3] == ">") // e.g "ls -1 {directory} > {file}"
     {
-      // int i{};
-      // while(parsedInput[2][i] == '/')
-      //   i++;
-      // parsedInput[2] = parsedInput[2].substr(i, parsedInput[2].length());
-
       std::fstream file {parsedInput[4], std::ios::out};
       for (auto& fileName : fileNamesInDirectory(parsedInput[2]))
         file << fileName << '\n';
-
     }
   }
 }
@@ -268,7 +257,7 @@ std::string doEcho(const std::string& input)
       }
     }
 
-    if(input[i] == '>')
+    if(input[i] == '>' || (input[i] == '1' && input[i+1] == '>'))
     {
       std::string fileName{};
       while(++i < input.length())
