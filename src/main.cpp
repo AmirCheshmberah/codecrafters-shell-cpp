@@ -154,18 +154,11 @@ void handle_cat()
       isRedirectOutput = true;
       directTo = parsedInput[parsedInput.size()-1];
     }
-    for(int i = 1; i < parsedInput.size(); i++)
+    if(isRedirectOutput && directTo != "")
     {
-      if(std::filesystem::exists(parsedInput[i]))
+      for(int i = 1; i < parsedInput.size()-2; i++)
       {
-        std::string content{};
-        std::fstream readFrom {parsedInput[i], std::ios::in};
-        while(getline(readFrom, content))
-        {
-          std::cout << content << '\n';
-        }
-
-        if(isRedirectOutput && directTo != "")
+        if(std::filesystem::exists(parsedInput[i]))
         {
           std::string content{};
           std::fstream readFrom {parsedInput[i], std::ios::in};
@@ -175,10 +168,30 @@ void handle_cat()
             writeTo << content << '\n';
           }
         }
+        else
+        {
+          std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
+        }
       }
-      else
+      return;
+    }
+    else
+    {
+      for(int i = 1; i < parsedInput.size(); i++)
       {
-        std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
+        if(std::filesystem::exists(parsedInput[i]))
+        {
+          std::string content{};
+          std::fstream readFrom {parsedInput[i], std::ios::in};
+          while(getline(readFrom, content))
+          {
+            std::cout << content << '\n';
+          }
+        }
+        else
+        {
+          std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
+        }
       }
     }
   }
