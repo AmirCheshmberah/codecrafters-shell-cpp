@@ -153,8 +153,8 @@ void handle_cat()
       if(std::filesystem::exists(parsedInput[i]))
       {
         std::string content{};
-        std::fstream f {parsedInput[i], std::ios::in};
-        while(getline(f, content))
+        std::fstream file {parsedInput[i], std::ios::in};
+        while(getline(file, content))
         {
           std::cout << content << '\n';
         }
