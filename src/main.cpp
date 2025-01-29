@@ -103,7 +103,7 @@ int main()
 
       case ls:
       {
-        handle_ls();
+        // handle_ls();
         break;
       }
 
@@ -210,7 +210,10 @@ void handle_ls()
 
 std::string doEcho(const std::string& input)
 {
+  std::vector<std::string> parsedEcho;
+  parsedEcho.reserve(8);
   std::string result = "";
+  std::string token = "";
   for(int i = 5; i < input.length();)
   {
     if(input[i] == '"')
@@ -219,11 +222,15 @@ std::string doEcho(const std::string& input)
       {
         if(input[i] == '\\')
         {
+          token += input[i];
           result += input[++i];
           continue;
         }
         result += input[i];
+        token += input[i];
       }
+      parsedEcho.emplace_back(token);
+      token = "";
       i++;
       continue;
     }
@@ -233,21 +240,26 @@ std::string doEcho(const std::string& input)
       while(input[++i] != '\'')
       {
         result += input[i];
+        token += input[i];
       }
+      parsedEcho.emplace_back(token);
+      token = "";
       i++;
       continue;
     }
 
     if(input[i] == '\\')
     {
-      result += input[++i];
+      result += input[i];
+      token += input[++i];
       i++;
       continue;
     }
 
     if(input[i] != ' ')
     {
-      result += input[i++];
+      result += input[i];
+      token += input[i++];
     }
     else
     {
@@ -256,11 +268,17 @@ std::string doEcho(const std::string& input)
         i++;
       }
       if(result != "")
+      {
+        if(token != "")
+          parsedEcho.emplace_back(token);
+        token = "";
         result += ' ';
+      }
     }
-
     if(input[i] == '>' || (input[i] == '1' && input[i+1] == '>'))
     {
+      if(input[i] == '1')
+        i++;
       if(result[result.length()-1] = ' ')
       {
         result = result.substr(0, result.length()-1);
@@ -279,6 +297,8 @@ std::string doEcho(const std::string& input)
       return "";
     }
   }
+  if(token != "")
+    parsedEcho.emplace_back(token);
   return result;
 }
 
