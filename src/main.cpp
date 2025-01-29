@@ -177,7 +177,7 @@ void handle_ls()
     // }
     if(parsedInput.size() == 1) // e.g "ls"
     {
-      for (auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
+      for (const auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
         std::cout << fileName << ' ';
       std::cout << '\n';
     }
@@ -185,14 +185,14 @@ void handle_ls()
     else if(parsedInput.size() == 3 && parsedInput[1] == ">") // e.g "ls > {file}"
     {
       std::fstream file {parsedInput[2], std::ios::out};
-      for(auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
+      for(const auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
         file << fileName << '\n';
     }
 
     else if(parsedInput.size() == 4 && std::filesystem::exists(parsedInput[1]) && parsedInput[2] == ">") // e.g "ls {directory} > {file}"
     {
       std::fstream file {parsedInput[3], std::ios::out};
-      for (auto& fileName : fileNamesInDirectory(parsedInput[1]))
+      for (const auto& fileName : fileNamesInDirectory(parsedInput[1]))
         file << fileName << '\n';
     }
 
@@ -200,7 +200,7 @@ void handle_ls()
             && parsedInput[3] == ">") // e.g "ls -1 {directory} > {file}"
     {
       std::fstream file {parsedInput[4], std::ios::out};
-      for (auto& fileName : fileNamesInDirectory(parsedInput[2]))
+      for (const auto& fileName : fileNamesInDirectory(parsedInput[2]))
         file << fileName << '\n';
     }
   }
