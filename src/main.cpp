@@ -293,7 +293,7 @@ std::string doEcho(const std::string& input)
   {
     result += ' ' + parsedEcho[i++];
   }
-  if(parsedEcho[i] == ">" || parsedEcho[i] != "1>")
+  if(parsedEcho[i] == ">" || parsedEcho[i] == "1>")
   {
     std::fstream file {parsedEcho[++i], std::ios::out};
     file << result << std::endl;
