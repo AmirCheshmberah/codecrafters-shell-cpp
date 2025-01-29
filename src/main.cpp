@@ -101,11 +101,11 @@ int main()
         break;
       }
 
-      // case ls:
-      // {
-      //   handle_ls();
-      //   break;
-      // }
+      case ls:
+      {
+        handle_ls();
+        break;
+      }
 
       case cat:
       {
@@ -169,9 +169,13 @@ void handle_cat()
 
 void handle_ls()
 {
-  if(parsedInput[0] == "ls") // e.g "ls"
+  if(parsedInput[0] == "ls")
   {
-    if(parsedInput.size() == 1)
+    // for(int i = 0; i < parsedInput.size(); i++)
+    // {
+
+    // }
+    if(parsedInput.size() == 1) // e.g "ls"
     {
       for (auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
         std::cout << fileName << ' ';
@@ -196,6 +200,20 @@ void handle_ls()
       for (auto& fileName : fileNamesInDirectory(parsedInput[1]))
         file << fileName << '\n';
     }
+
+    else if(parsedInput.size() == 5 && parsedInput[1] == "-1" && std::filesystem::exists(parsedInput[2])
+            && parsedInput[3] == ">") // e.g "ls -1 {directory} > {file}"
+    {
+      int i{};
+      while(parsedInput[2][i] == '/')
+        i++;
+      parsedInput[2] = parsedInput[2].substr(i, parsedInput[2].length());
+
+      std::fstream file {parsedInput[4], std::ios::out};
+      for (auto& fileName : fileNamesInDirectory(parsedInput[2]))
+        file << fileName << '\n';
+
+    }
   }
 }
 
@@ -204,6 +222,8 @@ std::string doEcho(const std::string& input)
   std::string result = "";
   for(int i = 5; i < input.length();)
   {
+    if(result != "")
+        result += ' ';
     if(input[i] == '"')
     {
       while(input[++i] != '"')
@@ -246,16 +266,10 @@ std::string doEcho(const std::string& input)
       {
         i++;
       }
-      if(result != "")
-        result += ' ';
     }
 
     if(input[i] == '>')
     {
-      if(result.back() == ' ')
-      {
-        result = result.substr(0, result.length()-1);
-      }
       std::string fileName{};
       while(++i < input.length())
       {
