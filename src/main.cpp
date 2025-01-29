@@ -322,6 +322,13 @@ std::string doEcho(const std::string& input)
   {
     std::fstream file {parsedEcho[++i], std::ios::out};
   }
+
+  if(parsedEcho[i] == ">>" || parsedEcho[i] == "1>>")
+  {
+    std::fstream file {parsedEcho[++i], std::ios::app};
+    file << result << std::endl;
+    return "";
+  }
   return result;
 }
 
