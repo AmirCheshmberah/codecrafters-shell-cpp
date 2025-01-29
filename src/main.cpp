@@ -256,6 +256,7 @@ std::string doEcho(const std::string& input)
         }
         token += input[i];
       }
+      if(input[++i] == '"') continue;
       parsedEcho.emplace_back(token);
       token = "";
       i++;
@@ -268,6 +269,7 @@ std::string doEcho(const std::string& input)
       {
         token += input[i];
       }
+      if(input[++i] == '\'') continue;
       parsedEcho.emplace_back(token);
       token = "";
       i++;
