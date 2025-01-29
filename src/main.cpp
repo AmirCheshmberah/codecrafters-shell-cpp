@@ -11,7 +11,7 @@ enum ValidCommands
   echo,
   type,
   cat,
-  ls,
+  // ls,
   exe_file
 };
 
@@ -21,7 +21,7 @@ ValidCommands isValid(std::string command)
   else if(command == "echo") return ValidCommands::echo;
   else if(command == "type") return ValidCommands::type;
   else if(command == "cat") return ValidCommands::cat;
-  else if(command == "ls") return ValidCommands::ls;
+  // else if(command == "ls") return ValidCommands::ls;
   else return ValidCommands::exe_file;
 }
 
@@ -101,11 +101,11 @@ int main()
         break;
       }
 
-      case ls:
-      {
-        handle_ls();
-        break;
-      }
+      // case ls:
+      // {
+      //   handle_ls();
+      //   break;
+      // }
 
       case cat:
       {
