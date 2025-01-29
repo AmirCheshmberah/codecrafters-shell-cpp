@@ -101,11 +101,11 @@ int main()
         break;
       }
 
-      case ls:
-      {
-        handle_ls();
-        break;
-      }
+      // case ls:
+      // {
+      //   handle_ls();
+      //   break;
+      // }
 
       case cat:
       {
