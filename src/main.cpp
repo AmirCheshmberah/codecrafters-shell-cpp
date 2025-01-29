@@ -213,8 +213,6 @@ std::string doEcho(const std::string& input)
   std::string result = "";
   for(int i = 5; i < input.length();)
   {
-    if(result != "")
-        result += ' ';
     if(input[i] == '"')
     {
       while(input[++i] != '"')
@@ -257,10 +255,17 @@ std::string doEcho(const std::string& input)
       {
         i++;
       }
+      if(result != "")
+        result += ' ';
     }
 
     if(input[i] == '>' || (input[i] == '1' && input[i+1] == '>'))
     {
+      if(result[result.length()-1] = ' ')
+      {
+        result = result.substr(0, result.length()-1);
+      }
+
       std::string fileName{};
       while(++i < input.length())
       {
