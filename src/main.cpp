@@ -104,7 +104,7 @@ int main()
 
       case pwd:
       {
-        std::cout << std::filesystem::current_path() << std::endl;
+        std::cout << std::filesystem::current_path().c_str() << std::endl;
         break;
       }
       // case ls:
