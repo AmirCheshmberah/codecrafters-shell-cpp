@@ -147,23 +147,38 @@ void handle_cat()
 {
   if(parsedInput[0] == "cat")
   {
+    bool isRedirectOutput = false;
+    std::string directTo = "";
+    if(parsedInput[parsedInput.size()-2] == ">" || parsedInput[parsedInput.size()-2] == "1>")
+    {
+      isRedirectOutput = true;
+      directTo = parsedInput[parsedInput.size()-1];
+    }
     for(int i = 1; i < parsedInput.size(); i++)
     {
-      
       if(std::filesystem::exists(parsedInput[i]))
       {
         std::string content{};
-        std::fstream file {parsedInput[i], std::ios::in};
-        while(getline(file, content))
+        std::fstream readFrom {parsedInput[i], std::ios::in};
+        while(getline(readFrom, content))
         {
           std::cout << content << '\n';
         }
-        file.close();
+
+        if(isRedirectOutput && directTo != "")
+        {
+          std::string content{};
+          std::fstream readFrom {parsedInput[i], std::ios::in};
+          std::fstream writeTo {directTo, std::ios::out};
+          while(getline(readFrom, content))
+          {
+            writeTo << content << '\n';
+          }
+        }
       }
       else
       {
         std::cout << "cat: " << parsedInput[i] << ": No such file or directory" << std::endl;
-        return;
       }
     }
   }
@@ -223,11 +238,9 @@ std::string doEcho(const std::string& input)
       {
         if(input[i] == '\\')
         {
-          token += input[i];
-          result += input[++i];
+          token += input[++i];
           continue;
         }
-        result += input[i];
         token += input[i];
       }
       parsedEcho.emplace_back(token);
@@ -240,7 +253,6 @@ std::string doEcho(const std::string& input)
     {
       while(input[++i] != '\'')
       {
-        result += input[i];
         token += input[i];
       }
       parsedEcho.emplace_back(token);
@@ -251,7 +263,6 @@ std::string doEcho(const std::string& input)
 
     if(input[i] == '\\')
     {
-      result += input[i];
       token += input[++i];
       i++;
       continue;
@@ -259,7 +270,6 @@ std::string doEcho(const std::string& input)
 
     if(input[i] != ' ')
     {
-      result += input[i];
       token += input[i++];
     }
     else
@@ -268,38 +278,28 @@ std::string doEcho(const std::string& input)
       {
         i++;
       }
-      if(result != "")
-      {
-        if(token != "")
-          parsedEcho.emplace_back(token);
-        token = "";
-        result += ' ';
-      }
-    }
-    if(input[i] == '>' || (input[i] == '1' && input[i+1] == '>'))
-    {
-      if(input[i] == '1')
-        i++;
-      if(result[result.length()-1] = ' ')
-      {
-        result = result.substr(0, result.length()-1);
-      }
-
-      std::string fileName{};
-      while(++i < input.length())
-      {
-        if(input[i] != ' ')
-        {
-          fileName += input[i];
-        }
-      }
-      std::fstream file {fileName, std::ios::out};
-      file << result << std::endl;
-      return "";
+      if(token != "")
+        parsedEcho.emplace_back(token);
+      token = "";
     }
   }
+
   if(token != "")
     parsedEcho.emplace_back(token);
+
+  int i = 0;
+  result = parsedEcho[i++];
+  while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>")
+  {
+    result += ' ' + parsedEcho[i++];
+  }
+  if(parsedEcho[i] == ">" || parsedEcho[i] != "1>")
+  {
+    std::fstream file {parsedEcho[++i], std::ios::out};
+    file << result << std::endl;
+    return "";
+  }
+
   return result;
 }
 
