@@ -36,7 +36,7 @@ bool isContain(const std::string& longString, const std::string& shortString);
 void handle_ls();
 void handle_cat();
 
-std::string builtin[3] = {"exit", "echo", "type"};
+std::string builtin[4] = {"exit", "echo", "type", "pwd"};
 
 std::vector<std::string> parsedInput;
 std::vector<std::string> parsedPathValues;
