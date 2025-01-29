@@ -114,6 +114,7 @@ int main()
       case exe_file:
       {
         bool isExe = false;
+
         if(parsedInput.size() > 1) // quoted executable
         {
           if(std::filesystem::exists(parsedInput[parsedInput.size()-1]))
@@ -122,7 +123,7 @@ int main()
             isExe = true;
           }
         }
-        if(getPath(parsedInput[0]) != "")
+        else if(getPath(parsedInput[0]) != "")
         {
           std::system(input.c_str());
           isExe = true;
