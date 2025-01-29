@@ -10,7 +10,7 @@ enum ValidCommands
   exitt,
   echo,
   type,
-  cat,
+  // cat,
   // ls,
   exe_file
 };
@@ -20,7 +20,7 @@ ValidCommands isValid(std::string command)
   if(command == "exit") return ValidCommands::exitt;
   else if(command == "echo") return ValidCommands::echo;
   else if(command == "type") return ValidCommands::type;
-  else if(command == "cat") return ValidCommands::cat;
+  // else if(command == "cat") return ValidCommands::cat;
   // else if(command == "ls") return ValidCommands::ls;
   else return ValidCommands::exe_file;
 }
@@ -106,11 +106,11 @@ int main()
       //   break;
       // }
 
-      case cat:
-      {
-        handle_cat();
-        break;
-      }
+      // case cat:
+      // {
+      //   handle_cat();
+      //   break;
+      // }
       case exe_file:
       {
         bool isExe = false;
