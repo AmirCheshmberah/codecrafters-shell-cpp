@@ -103,7 +103,7 @@ int main()
 
       case ls:
       {
-        // handle_ls();
+        handle_ls();
         break;
       }
 
