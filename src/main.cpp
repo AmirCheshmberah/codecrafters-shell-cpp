@@ -35,7 +35,7 @@ std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& direc
 std::string doEcho(const std::string& input);
 std::string getPath(const std::string& path);
 bool isContain(const std::string& longString, const std::string& shortString);
-void handle_cd(const std::string& input)
+void handle_cd(const std::string& input);
 void handle_ls();
 void handle_cat();
 
