@@ -35,7 +35,7 @@ std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& direc
 std::string doEcho(const std::string& input);
 std::string getPath(const std::string& path);
 bool isContain(const std::string& longString, const std::string& shortString);
-void handle_cd(const std::string& input);
+void handle_cd();
 void handle_ls();
 void handle_cat();
 
@@ -113,7 +113,7 @@ int main()
 
       case cd:
       {
-        handle_cd(input);
+        handle_cd();
         break;
       }
       // case ls:
@@ -161,11 +161,15 @@ int main()
   return 0;
 }
 
-void handle_cd(const std::string& input)
+void handle_cd()
 {
   if(parsedInput[0] == "cd")
   {
-    if(std::filesystem::exists(parsedInput[1]))
+    if(parsedInput[1] == "~")
+    {
+      std::filesystem::current_path("/home");
+    }
+    else if(std::filesystem::exists(parsedInput[1]))
     {
       std::filesystem::current_path(parsedInput[1]);
     }
