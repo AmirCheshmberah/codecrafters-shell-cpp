@@ -167,7 +167,7 @@ void handle_cd(const std::string& input)
   {
     if(std::filesystem::exists(parsedInput[1]))
     {
-      system(input.c_str());
+      std::filesystem::current_path(parsedInput[1]);
     }
     else
     {
