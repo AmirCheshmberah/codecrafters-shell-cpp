@@ -58,7 +58,6 @@ int main()
 
     parsedInput = mySpliter(input, ' ');
     parsedPathValues = mySpliter(getenv("PATH"), ':');
-
     switch (isValid(parsedInput[0]))
     {
       case exitt:
@@ -167,7 +166,7 @@ void handle_cd()
   {
     if(parsedInput[1] == "~")
     {
-      std::filesystem::current_path("/home");
+      std::filesystem::current_path(getenv("HOME"));
     }
     else if(std::filesystem::exists(parsedInput[1]))
     {
