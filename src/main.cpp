@@ -11,6 +11,7 @@ enum ValidCommands
   echo,
   type,
   pwd,
+  cd,
   // cat,
   // ls,
   exe_file
@@ -22,6 +23,7 @@ ValidCommands isValid(std::string command)
   else if(command == "echo") return ValidCommands::echo;
   else if(command == "type") return ValidCommands::type;
   else if(command == "pwd") return ValidCommands::pwd;
+  else if(command == "cd") return ValidCommands::cd;
   // else if(command == "cat") return ValidCommands::cat;
   // else if(command == "ls") return ValidCommands::ls;
   else return ValidCommands::exe_file;
@@ -33,10 +35,11 @@ std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& direc
 std::string doEcho(const std::string& input);
 std::string getPath(const std::string& path);
 bool isContain(const std::string& longString, const std::string& shortString);
+void handle_cd(const std::string& input)
 void handle_ls();
 void handle_cat();
 
-std::string builtin[4] = {"exit", "echo", "type", "pwd"};
+std::string builtin[5] = {"exit", "echo", "type", "pwd", "cd"};
 
 std::vector<std::string> parsedInput;
 std::vector<std::string> parsedPathValues;
@@ -104,7 +107,13 @@ int main()
 
       case pwd:
       {
-        std::cout << std::filesystem::current_path().c_str() << std::endl;
+        std::cout << std::filesystem::current_path().string() << std::endl;
+        break;
+      }
+
+      case cd:
+      {
+        handle_cd(input);
         break;
       }
       // case ls:
@@ -150,6 +159,21 @@ int main()
   }
 
   return 0;
+}
+
+void handle_cd(const std::string& input)
+{
+  if(parsedInput[0] == "cd")
+  {
+    if(std::filesystem::exists(parsedInput[1]))
+    {
+      system(input.c_str());
+    }
+    else
+    {
+      std::cout << "cd: " << parsedInput[1] << ": No such file or directory\n";
+    }
+  }
 }
 
 void handle_cat()
