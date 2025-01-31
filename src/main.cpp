@@ -189,19 +189,20 @@ std::string inputWithAutoComplete()
       std::string suggestion = getClosestMatch(parsedInput[0]);
       if(suggestion != "")
       {
-        parsedInput[0] = suggestion;
+        // parsedInput[0] = suggestion;
+        input = suggestion + ' ';
         while(cursor_pos > 0)
         {
           std::cout << '\b';
           cursor_pos--;
         }
-        input = "";
-        for(auto i : parsedInput)
-        {
-          input += i + ' ';
-          cursor_pos += i.length() + 1;
-          std::cout << i + " ";
-        }
+        // input = "";
+        // for(auto i : parsedInput)
+        // {
+        //   input += i + ' ';
+        //   cursor_pos += i.length() + 1;
+        //   std::cout << i + " ";
+        // }
       }
     }
     else
