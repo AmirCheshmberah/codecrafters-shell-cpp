@@ -190,8 +190,8 @@ std::string inputWithAutoComplete()
       std::string suggestion{};
       parsedInput = mySpliter(input, ' ');
       parsedPathValues = mySpliter(getenv("PATH"), ':');
-      suggestion = getClosestMatch(builtins, parsedInput[0]);
-      if(!isBuiltIn(suggestion))
+      // suggestion = getClosestMatch(builtins, parsedInput[0]);
+      // if(!isBuiltIn(suggestion))
       suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
 
       if(suggestion != "")
