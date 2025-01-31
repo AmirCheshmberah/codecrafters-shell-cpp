@@ -191,8 +191,10 @@ std::string inputWithAutoComplete()
       parsedInput = mySpliter(input, ' ');
       parsedPathValues = mySpliter(getenv("PATH"), ':');
       // suggestion = getClosestMatch(builtins, parsedInput[0]);
-      // if(!isBuiltIn(suggestion))
-      suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
+      for(auto i : parsedPathValues)
+      {
+        suggestion = getClosestMatch(fileNamesInDirectory(i), parsedInput[0]);
+      }
 
       if(suggestion != "")
       {
