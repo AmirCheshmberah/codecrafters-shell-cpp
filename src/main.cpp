@@ -209,13 +209,15 @@ std::string inputWithAutoComplete()
       cursor_pos++;
     }
   }
-  if(parsedInput.size() > 0)
+  if(parsedInput.size() > 0 || cursor_pos == 0)
   {
     input = "";
   }
-  for(auto i : parsedInput)
+  for(int i = 0; i < parsedInput.size(); i++)
   {
-    input += i + " ";
+    input += parsedInput[i];
+    if(i < parsedInput.size()-1)
+      input += ' ';
   }
   return input;
 }
