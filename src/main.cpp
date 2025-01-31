@@ -188,31 +188,29 @@ std::string inputWithAutoComplete()
     {
       std::string suggestion{};
       parsedInput = mySpliter(input, ' ');
-      if(isBuiltIn(parsedInput[0]))
-        suggestion = getClosestMatch(builtins, parsedInput[0]);
-      else
+      suggestion = getClosestMatch(builtins, parsedInput[0]);
+      if(!isBuiltIn(suggestion))
         suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
-
-        if(suggestion != "")
+      if(suggestion != "")
+      {
+        parsedInput[0] = suggestion;
+        while(cursor_pos > 0)
         {
-          parsedInput[0] = suggestion;
-          while(cursor_pos > 0)
-          {
-            std::cout << '\b';
-            cursor_pos--;
-          }
-          input = "";
-          for(auto i : parsedInput)
-          {
-            input += i + ' ';
-            cursor_pos += i.length() + 1;
-            std::cout << i + " ";
-          }
+          std::cout << '\b';
+          cursor_pos--;
         }
-        else
+        input = "";
+        for(auto i : parsedInput)
         {
-          std::cout << '\a';
+          input += i + ' ';
+          cursor_pos += i.length() + 1;
+          std::cout << i + " ";
         }
+      }
+      else
+      {
+        std::cout << '\a';
+      }
     }
     else
     {
@@ -264,7 +262,7 @@ bool isBuiltIn (const std::string& input)
 {
   for(int i = 0; i < builtins.size(); i++)
   {
-    if (parsedInput[1] == builtins[i])
+    if (input == builtins[i])
       return true;
   }
   return false;
