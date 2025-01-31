@@ -209,7 +209,10 @@ std::string inputWithAutoComplete()
       cursor_pos++;
     }
   }
-  input = "";
+  if(parsedInput.size() > 0)
+  {
+    input = "";
+  }
   for(auto i : parsedInput)
   {
     input += i + " ";
