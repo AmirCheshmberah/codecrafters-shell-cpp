@@ -150,6 +150,8 @@ int main()
 
 std::string inputWithAutoComplete()
 {
+  std::vector<std::string> parsedInput;
+  parsedInput.reserve(8);
   std::string input{};
   char singleChar{};
   size_t cursor_pos{};
@@ -183,20 +185,21 @@ std::string inputWithAutoComplete()
     }
     else if(singleChar == '\t')
     {
-      std::string suggestion = getClosestMatch(input);
+      parsedInput = mySpliter(input, ' ');
+      std::string suggestion = getClosestMatch(parsedInput[0]);
       if(suggestion != "")
       {
-        input = suggestion + " ";
-      }
-      while(suggestion != "" && cursor_pos > 0)
-      {
-        std::cout << '\b';
-        cursor_pos--;
-      }
-      if(suggestion != "")
-      {
+        parsedInput[0] = suggestion;
+        while(cursor_pos > 0)
+        {
+          std::cout << '\b';
+          cursor_pos--;
+        }
         cursor_pos += suggestion.length() + 1;
-        std::cout << suggestion << " ";
+        for(auto i : parsedInput)
+        {
+          std::cout << i + " ";
+        }
       }
     }
     else
@@ -205,6 +208,11 @@ std::string inputWithAutoComplete()
       std::cout << singleChar;
       cursor_pos++;
     }
+  }
+  input = "";
+  for(auto i : parsedInput)
+  {
+    input += i + " ";
   }
   return input;
 }
