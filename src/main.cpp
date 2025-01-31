@@ -190,14 +190,15 @@ std::string inputWithAutoComplete()
       if(suggestion != "")
       {
         parsedInput[0] = suggestion;
-        input = suggestion + " ";
         while(cursor_pos > 0)
         {
           std::cout << '\b';
           cursor_pos--;
         }
+        input = "";
         for(auto i : parsedInput)
         {
+          input += i + ' ';
           cursor_pos += i.length() + 1;
           std::cout << i + " ";
         }
@@ -210,18 +211,6 @@ std::string inputWithAutoComplete()
       cursor_pos++;
     }
   }
-
-  if(parsedInput.size() > 1)
-  {
-    input = "";
-    for(int i = 0; i < parsedInput.size(); i++)
-    {
-      input += parsedInput[i];
-      if(i < parsedInput.size()-1)
-        input += ' ';
-    }
-  }
-
   return input;
 }
 
