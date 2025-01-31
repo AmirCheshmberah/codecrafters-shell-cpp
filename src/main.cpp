@@ -185,7 +185,9 @@ std::string inputWithAutoComplete()
     {
       std::string suggestion = getClosestMatch(input);
       if(suggestion != "")
-        input = suggestion;
+      {
+        input = suggestion + " ";
+      }
       while(suggestion != "" && cursor_pos > 0)
       {
         std::cout << '\b';
@@ -193,8 +195,8 @@ std::string inputWithAutoComplete()
       }
       if(suggestion != "")
       {
-        cursor_pos += suggestion.length();
-        std::cout << suggestion;
+        cursor_pos += suggestion.length() + 1;
+        std::cout << suggestion << " ";
       }
     }
     else
