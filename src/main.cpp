@@ -589,10 +589,18 @@ std::vector<std::string> fileNamesInDirectory(const std::string& directory)
 {
   std::vector<std::string> fileNames;
   fileNames.reserve(8);
-  for(auto &entry : std::filesystem::directory_iterator(directory))
+  try
   {
-    fileNames.emplace_back(entry.path().filename().generic_string());
+    for(auto &entry : std::filesystem::directory_iterator(directory))
+    {
+      fileNames.emplace_back(entry.path().filename().generic_string());
+    }
   }
+  catch(const std::exception& e)
+  {
+    // std::cerr << e.what() << '\n';
+  }
+  
   return fileNames;
 }
 
@@ -600,9 +608,17 @@ std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& direc
 {
   std::vector<std::string> fileNames;
   fileNames.reserve(8);
-  for(auto &entry : std::filesystem::directory_iterator(directory))
+  try
   {
-    fileNames.emplace_back(entry.path().filename().generic_string());
+    for(auto &entry : std::filesystem::directory_iterator(directory))
+    {
+      fileNames.emplace_back(entry.path().filename().generic_string());
+    }
   }
+  catch(const std::exception& e)
+  {
+    // std::cerr << e.what() << '\n';
+  }
+  
   return fileNames;
 }
