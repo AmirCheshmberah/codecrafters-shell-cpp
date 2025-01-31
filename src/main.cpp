@@ -221,6 +221,7 @@ std::string inputWithAutoComplete()
         input += ' ';
     }
   }
+
   return input;
 }
 
