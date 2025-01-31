@@ -1,9 +1,12 @@
 #include <iostream>
 #include <vector>
+#include <array>
 #include <cstdlib>
 #include <string>
 #include <filesystem>
 #include <fstream>
+#include <termios.h>
+#include <unistd.h>
 
 enum ValidCommands
 {
@@ -32,17 +35,23 @@ ValidCommands isValid(std::string command)
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 std::vector<std::string> fileNamesInDirectory(const std::string& directory);
 std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& directory);
+std::string getClosestMatch(const std::string& input);
 std::string doEcho(const std::string& input);
 std::string getPath(const std::string& path);
 bool isContain(const std::string& longString, const std::string& shortString);
 void handle_cd();
 void handle_ls();
 void handle_cat();
+void handle_type();
+void modTerminal();
+std::string inputWithAutoComplete();
+void resetTerminalToOriginal();
 
-std::string builtin[5] = {"exit", "echo", "type", "pwd", "cd"};
 
+std::array <std::string, 5> builtins = {"exit", "echo", "type", "pwd", "cd"};
 std::vector<std::string> parsedInput;
 std::vector<std::string> parsedPathValues;
+termios orgTerm, modTerm;
 
 int main()
 {
@@ -53,11 +62,11 @@ int main()
     std::cerr << std::unitbuf;
     std::cout << "$ ";
 
-    std::string input;
-    std::getline(std::cin, input);
-
+    std::string input = inputWithAutoComplete();
+    // std::getline(std::cin, input);
     parsedInput = mySpliter(input, ' ');
     parsedPathValues = mySpliter(getenv("PATH"), ':');
+
     switch (isValid(parsedInput[0]))
     {
       case exitt:
@@ -78,29 +87,7 @@ int main()
 
       case type:
       {
-        bool isBuiltIn = false, isInPath = false;
-        int builtinSize = sizeof(builtin)/sizeof(std::string);
-        for(int i = 0; i < builtinSize; i++)
-        {
-          if (parsedInput[1] == builtin[i])
-          {
-            std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
-            isBuiltIn = true;
-            break;
-          }
-        }
-        if(!isBuiltIn) // PATH
-        {
-          std::string filePath = getPath(parsedInput[1]);
-          if(filePath != "")
-          {
-            std::cout << parsedInput[1] << " is " << filePath << '\n';
-            isInPath = true;
-            break;
-          }
-        }
-        if(!isBuiltIn && !isInPath)
-          std::cout << parsedInput[1] << ": not found" << '\n';
+        handle_type();
         break;
       }
 
@@ -115,6 +102,7 @@ int main()
         handle_cd();
         break;
       }
+
       // case ls:
       // {
       //   handle_ls();
@@ -158,6 +146,126 @@ int main()
   }
 
   return 0;
+}
+
+std::string inputWithAutoComplete()
+{
+  std::string input{};
+  char singleChar{};
+  size_t cursor_pos{};
+  modTerminal();
+  while(true)
+  {
+    singleChar = std::cin.get();
+    if(singleChar == '\n')
+    {
+      std::cout << std::endl;
+      break;
+    }
+    else if(singleChar == 65 || // up arrow
+            singleChar == 66 || // down arrow
+            singleChar == 67 || // right arrow
+            singleChar == 68 )  // left arrow
+    {
+    }
+    else if(singleChar == 127)
+    {
+      if(cursor_pos > 0)
+      {
+        std::cout << "\b";
+        printf("\e[0K");
+        cursor_pos--;
+      }
+      if(!input.empty())
+      {
+        input.pop_back();
+      }
+    }
+    else if(singleChar == '\t')
+    {
+      std::string suggestion = getClosestMatch(input);
+      if(suggestion != "")
+        input = suggestion;
+      while(suggestion != "" && cursor_pos > 0)
+      {
+        std::cout << '\b';
+        cursor_pos--;
+      }
+      if(suggestion != "")
+      {
+        cursor_pos += suggestion.length();
+        std::cout << suggestion;
+      }
+    }
+    else
+    {
+      input += singleChar;
+      std::cout << singleChar;
+      cursor_pos++;
+    }
+  }
+  return input;
+}
+
+void modTerminal()
+{
+  tcgetattr(STDIN_FILENO, &orgTerm);
+  tcgetattr(STDIN_FILENO, &modTerm);
+  modTerm.c_lflag &= ~(ICANON | ECHO);
+  tcsetattr(STDIN_FILENO, TCSANOW, &modTerm);
+  atexit(resetTerminalToOriginal);
+}
+
+void resetTerminalToOriginal()
+{
+  tcsetattr(STDIN_FILENO, TCSANOW, &orgTerm);
+}
+
+std::string getClosestMatch(const std::string& input)
+{
+  int closestMatchIdx{-1};
+  int longestMatch{};
+  for(int i = 0; i < builtins.size(); i++)
+  {
+    int j;
+    for(j = 0; j < builtins[i].length(); j++)
+    {
+      if(builtins[i][j] != input[j]) break;
+    }
+    if(longestMatch < j)
+    {
+        longestMatch = j;
+        closestMatchIdx = i;
+    }
+  }
+  if(closestMatchIdx == -1) return "";
+  return builtins[closestMatchIdx];
+}
+
+
+void handle_type()
+{
+  bool isBuiltIn = false, isInPath = false;
+  for(int i = 0; i < builtins.size(); i++)
+  {
+    if (parsedInput[1] == builtins[i])
+    {
+      std::cout << parsedInput[1] <<" is a shell builtins" << '\n';
+      isBuiltIn = true;
+      break;
+    }
+  }
+  if(!isBuiltIn) // PATH
+  {
+    std::string filePath = getPath(parsedInput[1]);
+    if(filePath != "")
+    {
+      std::cout << parsedInput[1] << " is " << filePath << '\n';
+      isInPath = true;
+    }
+  }
+  if(!isBuiltIn && !isInPath)
+    std::cout << parsedInput[1] << ": not found" << '\n';
 }
 
 void handle_cd()
@@ -233,14 +341,10 @@ void handle_cat()
   }
 }
 
-void handle_ls() // its a stinky implementation
+void handle_ls() // stinky implementation
 {
   if(parsedInput[0] == "ls")
   {
-    // for(int i = 0; i < parsedInput.size(); i++)
-    // {
-
-    // }
     if(parsedInput.size() == 1) // e.g "ls"
     {
       for (const auto& fileName : fileNamesInDirectory(std::filesystem::current_path()))
@@ -426,9 +530,16 @@ std::string getPath(const std::string& pathFile)
   while(getline(streamPathValue, pathValue, ':'))
   {
     std::string result = pathValue + '/' + pathFile;
-    if(std::filesystem::exists(result))
+    try
     {
-      return result;
+      if(std::filesystem::exists(result))
+      {
+        return result;
+      }
+    }
+    catch(const std::exception& e)
+    {
+      // std::cerr << e.what() << '\n';
     }
   }
   return "";
