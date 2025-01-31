@@ -152,6 +152,7 @@ int main()
 std::string inputWithAutoComplete()
 {
   std::vector<std::string> parsedInput;
+  std::vector<std::string> parsedPathValues;
   parsedInput.reserve(8);
   std::string input{};
   char singleChar{};
@@ -188,9 +189,11 @@ std::string inputWithAutoComplete()
     {
       std::string suggestion{};
       parsedInput = mySpliter(input, ' ');
+      parsedPathValues = mySpliter(getenv("PATH"), ':');
       suggestion = getClosestMatch(builtins, parsedInput[0]);
       if(!isBuiltIn(suggestion))
-        suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
+      suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
+
       if(suggestion != "")
       {
         parsedInput[0] = suggestion;
