@@ -195,9 +195,9 @@ std::string inputWithAutoComplete()
           std::cout << '\b';
           cursor_pos--;
         }
-        cursor_pos += suggestion.length() + 1;
         for(auto i : parsedInput)
         {
+          cursor_pos += i.length() + 1;
           std::cout << i + " ";
         }
       }
