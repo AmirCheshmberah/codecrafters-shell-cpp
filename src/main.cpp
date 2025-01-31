@@ -203,6 +203,10 @@ std::string inputWithAutoComplete()
           std::cout << i + " ";
         }
       }
+      else
+      {
+        std::cout << '\a';
+      }
     }
     else
     {
