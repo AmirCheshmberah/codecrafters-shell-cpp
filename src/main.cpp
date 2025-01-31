@@ -252,7 +252,7 @@ void handle_type()
   {
     if (parsedInput[1] == builtins[i])
     {
-      std::cout << parsedInput[1] <<" is a shell builtins" << '\n';
+      std::cout << parsedInput[1] <<" is a shell builtin" << '\n';
       isBuiltIn = true;
       break;
     }
