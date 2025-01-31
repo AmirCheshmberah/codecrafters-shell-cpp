@@ -35,9 +35,10 @@ ValidCommands isValid(std::string command)
 std::vector<std::string> mySpliter(const std::string& input, const char& delim);
 std::vector<std::string> fileNamesInDirectory(const std::string& directory);
 std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& directory);
-std::string getClosestMatch(const std::string& input);
+std::string getClosestMatch(const std::vector<std::string>& vec, const std::string& input);
 std::string doEcho(const std::string& input);
 std::string getPath(const std::string& path);
+bool isBuiltIn (const std::string& input);
 bool isContain(const std::string& longString, const std::string& shortString);
 void handle_cd();
 void handle_ls();
@@ -48,7 +49,7 @@ std::string inputWithAutoComplete();
 void resetTerminalToOriginal();
 
 
-std::array <std::string, 5> builtins = {"exit", "echo", "type", "pwd", "cd"};
+std::vector <std::string> builtins = {"exit", "echo", "type", "pwd", "cd"};
 std::vector<std::string> parsedInput;
 std::vector<std::string> parsedPathValues;
 termios orgTerm, modTerm;
@@ -185,28 +186,33 @@ std::string inputWithAutoComplete()
     }
     else if(singleChar == '\t')
     {
+      std::string suggestion{};
       parsedInput = mySpliter(input, ' ');
-      std::string suggestion = getClosestMatch(parsedInput[0]);
-      if(suggestion != "")
-      {
-        parsedInput[0] = suggestion;
-        while(cursor_pos > 0)
-        {
-          std::cout << '\b';
-          cursor_pos--;
-        }
-        input = "";
-        for(auto i : parsedInput)
-        {
-          input += i + ' ';
-          cursor_pos += i.length() + 1;
-          std::cout << i + " ";
-        }
-      }
+      if(isBuiltIn(parsedInput[0]))
+        suggestion = getClosestMatch(builtins, parsedInput[0]);
       else
-      {
-        std::cout << '\a';
-      }
+        suggestion = getClosestMatch(parsedPathValues, parsedInput[0]);
+
+        if(suggestion != "")
+        {
+          parsedInput[0] = suggestion;
+          while(cursor_pos > 0)
+          {
+            std::cout << '\b';
+            cursor_pos--;
+          }
+          input = "";
+          for(auto i : parsedInput)
+          {
+            input += i + ' ';
+            cursor_pos += i.length() + 1;
+            std::cout << i + " ";
+          }
+        }
+        else
+        {
+          std::cout << '\a';
+        }
     }
     else
     {
@@ -232,16 +238,16 @@ void resetTerminalToOriginal()
   tcsetattr(STDIN_FILENO, TCSANOW, &orgTerm);
 }
 
-std::string getClosestMatch(const std::string& input)
+std::string getClosestMatch(const std::vector<std::string>& vec, const std::string& input)
 {
   int closestMatchIdx{-1};
   int longestMatch{};
-  for(int i = 0; i < builtins.size(); i++)
+  for(int i = 0; i < vec.size(); i++)
   {
     int j;
-    for(j = 0; j < builtins[i].length(); j++)
+    for(j = 0; j < vec[i].length(); j++)
     {
-      if(builtins[i][j] != input[j]) break;
+      if(vec[i][j] != input[j]) break;
     }
     if(longestMatch < j)
     {
@@ -250,9 +256,19 @@ std::string getClosestMatch(const std::string& input)
     }
   }
   if(closestMatchIdx == -1) return "";
-  return builtins[closestMatchIdx];
+  return vec[closestMatchIdx];
 }
 
+
+bool isBuiltIn (const std::string& input)
+{
+  for(int i = 0; i < builtins.size(); i++)
+  {
+    if (parsedInput[1] == builtins[i])
+      return true;
+  }
+  return false;
+}
 
 void handle_type()
 {
