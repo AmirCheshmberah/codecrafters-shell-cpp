@@ -164,12 +164,12 @@ std::string inputWithAutoComplete()
       std::cout << std::endl;
       break;
     }
-    else if(singleChar == 65 || // up arrow
-            singleChar == 66 || // down arrow
-            singleChar == 67 || // right arrow
-            singleChar == 68 )  // left arrow
-    {
-    }
+    // else if(singleChar == 65 || // up arrow
+    //         singleChar == 66 || // down arrow
+    //         singleChar == 67 || // right arrow
+    //         singleChar == 68 )  // left arrow
+    // {
+    // }
     else if(singleChar == 127)
     {
       if(cursor_pos > 0)
@@ -195,15 +195,12 @@ std::string inputWithAutoComplete()
           std::cout << '\b';
           cursor_pos--;
         }
-        input = parsedInput[0] + ' ';
-        for(int i = 1; i < parsedInput.size(); i++)
+        input = "";
+        for(auto i : parsedInput)
         {
-          input += ' ' + parsedInput[i];
-        }
-        for(int i = 0; i < parsedInput.size(); i++)
-        {
-          cursor_pos += parsedInput[i].length() + 1;
-          std::cout << parsedInput[i] + " ";
+          input += i + ' ';
+          cursor_pos += i.length() + 1;
+          std::cout << i + " ";
         }
       }
     }
