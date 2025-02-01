@@ -56,6 +56,7 @@ termios orgTerm, modTerm;
 
 int main()
 {
+  parsedPathValues = mySpliter(getenv("PATH"), ':');
   while(true)
   {
     // Flush after every std::cout / std:cerr
@@ -66,8 +67,6 @@ int main()
     std::string input = inputWithAutoComplete();
     // std::getline(std::cin, input);
     parsedInput = mySpliter(input, ' ');
-    parsedPathValues = mySpliter(getenv("PATH"), ':');
-
     switch (isValid(parsedInput[0]))
     {
       case exitt:
@@ -145,14 +144,12 @@ int main()
       }
     }
   }
-
   return 0;
 }
 
 std::string inputWithAutoComplete()
 {
   std::vector<std::string> parsedInput;
-  std::vector<std::string> parsedPathValues;
   parsedInput.reserve(8);
   std::string input{};
   char singleChar{};
@@ -187,15 +184,21 @@ std::string inputWithAutoComplete()
     }
     else if(singleChar == '\t')
     {
-      std::string suggestion{};
       parsedInput = mySpliter(input, ' ');
-      parsedPathValues = mySpliter(getenv("PATH"), ':');
-      // suggestion = getClosestMatch(builtins, parsedInput[0]);
-      for(auto i : parsedPathValues)
+      parsedPathValues.erase(parsedPathValues.begin() + 19); // microsoft being bitch
+  
+      std::string suggestion = getClosestMatch(builtins, parsedInput[0]);
+      if(!isBuiltIn(suggestion))
       {
-        suggestion = getClosestMatch(fileNamesInDirectory(i), parsedInput[0]);
+        for(auto i : parsedPathValues)
+        {
+          for(auto j : fileNamesInDirectory(i))
+          {
+            if(j.find(parsedInput[0]) == 0)
+              std::cout << j << '\n';
+          }
+        }
       }
-
       if(suggestion != "")
       {
         parsedInput[0] = suggestion;
@@ -471,7 +474,6 @@ std::string doEcho(const std::string& input)
 
   if(token != "")
     parsedEcho.emplace_back(token);
-
   int i = 0;
   result = parsedEcho[i++];
   while (i < parsedEcho.size() && parsedEcho[i] != ">" && parsedEcho[i] != "1>"
@@ -588,36 +590,42 @@ std::string getPath(const std::string& pathFile)
 std::vector<std::string> fileNamesInDirectory(const std::string& directory)
 {
   std::vector<std::string> fileNames;
-  fileNames.reserve(8);
-  try
+  
+  if(std::filesystem::exists(directory))
   {
-    for(auto &entry : std::filesystem::directory_iterator(directory))
+    fileNames.reserve(8);
+    try
     {
-      fileNames.emplace_back(entry.path().filename().generic_string());
+      for(auto &entry : std::filesystem::directory_iterator(directory))
+      {
+        fileNames.emplace_back(entry.path().filename().string());
+      }
+    }
+    catch(const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
     }
   }
-  catch(const std::exception& e)
-  {
-    // std::cerr << e.what() << '\n';
-  }
-  
   return fileNames;
 }
 
 std::vector<std::string> fileNamesInDirectory(const std::filesystem::path& directory)
 {
   std::vector<std::string> fileNames;
-  fileNames.reserve(8);
-  try
+  if(std::filesystem::exists(directory))
   {
-    for(auto &entry : std::filesystem::directory_iterator(directory))
+    fileNames.reserve(8);
+    try
     {
-      fileNames.emplace_back(entry.path().filename().generic_string());
+      for(auto &entry : std::filesystem::directory_iterator(directory))
+      {
+        fileNames.emplace_back(entry.path().filename().string());
+      }
     }
-  }
-  catch(const std::exception& e)
-  {
-    // std::cerr << e.what() << '\n';
+    catch(const std::exception& e)
+    {
+      std::cerr << e.what() << '\n';
+    }
   }
   
   return fileNames;
